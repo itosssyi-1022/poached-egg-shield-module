@@ -6,6 +6,7 @@
 #define JP_BSLH        0x89
 #define JP_PIPE        LS(0x89)
 #define JP_UNDERSCORE  LS(0x87)
+#define JP_YEN          0x89
 
 / {
     keymap {
@@ -41,7 +42,7 @@
         symbol_language_layer {
             bindings = <
 &none  &none  &none  &kp LBKT        &kp RBKT         &kp LANG2                &none      &kp LG(L)  &kp LG(E)  &none     &none  &none
-&none  &none  &none  &kp LPAR        &kp RPAR         &kp LANG1                &kp JP_BSLH  &kp JP_PIPE  &kp FSLH   &kp BSPC  &none  &none
+&none  &none  &none  &kp LPAR        &kp RPAR         &kp LANG1                &kp JP_YEN  &kp JP_PIPE  &kp FSLH   &kp BSPC  &none  &none
 &none  &none  &none  &kp LEFT_BRACE  &kp RIGHT_BRACE  &none                    &kp CARET  &kp TILDE  &kp LG(V)  &none     &none  &none
 &none  &none  &none  &none           &none            &none      &none  &none  &none      &none      &none      &none     &none  &none
             >;
