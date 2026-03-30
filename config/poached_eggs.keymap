@@ -33,15 +33,15 @@
         shortcut_function_layer {
             bindings = <
 &none  &none      &kp GRAVE  &kp AT     &kp HASH     &none                &kp F10  &kp F7  &kp F8  &kp F9  &none  &none
-&none  &kp LC(A)  &kp LALT   &kp TAB    &kp LS(TAB)  &none                &kp F11  &kp F4  &kp F5  &kp F6  &none  &none
-&none  &kp LC(S)  &kp LC(X)  &kp LC(C)  &kp LC(V)    &none                &kp F12  &kp F1  &kp F2  &kp F3  &none  &none
+&none  &none  &kp LC(S)   &kp TAB    &kp LS(TAB)  &none                &kp F11  &kp F4  &kp F5  &kp F6  &none  &none
+&kp LALT  &kp LC(A)  &kp LC(X)  &kp LC(C)  &kp LC(V)    &none                &kp F12  &kp F1  &kp F2  &kp F3  &none  &none
 &none  &kp LC(Z)  &none      &none      &none        &none  &none  &none  &none    &none   &none   &none   &none  &none
             >;
         };
 
         symbol_language_layer {
             bindings = <
-&none  &none  &none  &kp LBKT        &kp RBKT         &kp LANG2                &none      &kp LG(L)  &kp LG(E)  &none     &none  &none
+&none  &none  &none  &kp LBKT        &kp RBKT         &kp LANG2                &kp LG(L)      &kp LG(E)  &kp JP_UNDERSCORE  &none     &none  &none
 &none  &none  &none  &kp LPAR        &kp RPAR         &kp LANG1                &kp JP_YEN  &kp JP_PIPE  &kp FSLH   &kp BSPC  &none  &none
 &none  &none  &none  &kp LEFT_BRACE  &kp RIGHT_BRACE  &none                    &kp CARET  &kp TILDE  &kp LG(V)  &none     &none  &none
 &none  &none  &none  &none           &none            &none      &none  &none  &none      &none      &none      &none     &none  &none
