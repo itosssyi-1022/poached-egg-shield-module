@@ -13,15 +13,15 @@
 ### ハードウェア / MCU
 
 - ビルド対象ボード: `seeeduino_xiao_ble`
-  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/build.yaml`
+  - 出典: `build.yaml`
 - shield metadata 上では `seeed_xiao` を要求
-  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/boards/shields/poached_eggs/poached_eggs.zmk.yml`
+  - 出典: `config/boards/shields/poached_eggs/poached_eggs.zmk.yml`
 
 ### split の役割
 
 - `CONFIG_ZMK_SPLIT_ROLE_CENTRAL` は左側 shield でのみ有効
 - `CONFIG_ZMK_SPLIT` は左右両方で有効
-  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/boards/shields/poached_eggs/Kconfig.defconfig`
+  - 出典: `config/boards/shields/poached_eggs/Kconfig.defconfig`
 
 これはつまり、
 
@@ -36,11 +36,11 @@
 - 左半分では次の設定が有効です
   - `CONFIG_ZMK_STUDIO=y`
   - `CONFIG_ZMK_STUDIO_LOCKING=y`
-  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/boards/shields/poached_eggs/poached_eggs_left.conf`
+  - 出典: `config/boards/shields/poached_eggs/poached_eggs_left.conf`
 - GitHub Actions の左側 build には `studio-rpc-usb-uart` snippet も追加されています
-  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/build.yaml`
+  - 出典: `build.yaml`
 - keymap には Bluetooth control layer 上に `&studio_unlock` binding があります
-  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/poached_eggs.keymap`
+  - 出典: `config/poached_eggs.keymap`
 
 これらの設定から、このリポジトリの左側 firmware は ZMK Studio と併用される前提で作られていると判断できます。
 
@@ -49,7 +49,7 @@
 今回の現象として最もあり得る流れは次のとおりです。
 
 1. 以前に保存された runtime keymap またはその他の ZMK 永続設定がフラッシュ領域に残っている
-2. ユーザーが `/config/poached_eggs.keymap` を編集し、push して GitHub Actions から新しい firmware を取得する
+2. ユーザーが `config/poached_eggs.keymap` を編集し、push して GitHub Actions から新しい firmware を取得する
 3. 左右のデバイスに firmware を再書き込みする
 4. 起動時に ZMK が永続設定を復元し、新しく compile されたデフォルト keymap ではなく、保存済みの runtime keymap / 状態を使い続ける
 5. その結果、ユーザーからは「`.keymap` の変更が反映されていない」ように見える
@@ -64,7 +64,7 @@
 
 ## このリポジトリで行った変更
 
-`/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/build.yaml` に、以下の build を追加しました。
+`build.yaml` に、以下の build を追加しました。
 
 - `seeeduino_xiao_ble + settings_reset`
 
