@@ -3,6 +3,7 @@
 #include <dt-bindings/zmk/keys.h>
 
 // Japanese Windows expects JIS-position usages for these symbols.
+
 #define JP_BSLH        0x89
 #define JP_PIPE        LS(0x89)
 #define JP_UNDERSCORE  LS(0x87)
@@ -23,28 +24,28 @@
 
         symbol_navigation_layer {
             bindings = <
-&none  &kp ASTRK  &kp N7  &kp N8  &kp N9  &kp PLUS                 &kp DOLLAR  &kp HOME  &kp UP    &kp END    &kp PSCRN  &none
-&none  &kp EXCL   &kp N4  &kp N5  &kp N6  &kp MINUS                &kp PRCNT   &kp LEFT  &kp DOWN  &kp RIGHT  &none      &none
-&none  &kp N0     &kp N1  &kp N2  &kp N3  &kp FSLH                 &kp AMPS    &kp SQT   &kp DQT   &kp SEMI   &kp COLON  &none
-&none  &none      &none   &none   &none   &none      &none  &none  &none       &none     &none     &none      &kp JP_UNDERSCORE    &none
+&none   &kp ASTRK  &kp N7  &kp N8  &kp N9  &kp PLUS                 &kp DOLLAR  &kp HOME  &kp UP    &kp END    &kp PSCRN          &none
+&none   &kp EXCL   &kp N4  &kp N5  &kp N6  &kp MINUS                &kp PRCNT   &kp LEFT  &kp DOWN  &kp RIGHT  &none              &none
+&trans  &kp N0     &kp N1  &kp N2  &kp N3  &kp FSLH                 &kp AMPS    &kp SQT   &kp DQT   &kp SEMI   &kp COLON          &trans
+&trans  &none      &none   &none   &none   &none      &none  &none  &none       &none     &none     &none      &kp JP_UNDERSCORE  &trans
             >;
         };
 
         shortcut_function_layer {
             bindings = <
-&none  &none      &kp GRAVE  &kp AT     &kp HASH     &none                &kp F10  &kp F7  &kp F8  &kp F9  &none  &none
-&none  &none  &kp LC(S)   &kp TAB    &kp LS(TAB)  &none                &kp F11  &kp F4  &kp F5  &kp F6  &none  &none
-&kp LALT  &kp LC(A)  &kp LC(X)  &kp LC(C)  &kp LC(V)    &none                &kp F12  &kp F1  &kp F2  &kp F3  &none  &none
-&none  &kp LC(Z)  &none      &none      &none        &none  &none  &none  &none    &none   &none   &none   &none  &none
+&none     &none      &kp GRAVE  &kp AT     &kp HASH     &none                &kp F10  &kp F7  &kp F8  &kp F9  &none  &none
+&none     &none      &kp LC(S)  &kp TAB    &kp LS(TAB)  &none                &kp F11  &kp F4  &kp F5  &kp F6  &none  &none
+&kp LALT  &kp LC(A)  &kp LC(X)  &kp LC(C)  &kp LC(V)    &none                &kp F12  &kp F1  &kp F2  &kp F3  &none  &trans
+&none     &kp LC(Z)  &none      &none      &none        &none  &none  &none  &none    &none   &none   &none   &none  &trans
             >;
         };
 
         symbol_language_layer {
             bindings = <
-&none  &none  &none  &kp LBKT        &kp RBKT         &kp LANG2                &kp LG(L)      &kp LG(E)  &kp JP_UNDERSCORE  &none     &none  &none
-&none  &none  &none  &kp LPAR        &kp RPAR         &kp LANG1                &kp JP_YEN  &kp JP_PIPE  &kp FSLH   &kp BSPC  &none  &none
-&none  &none  &none  &kp LEFT_BRACE  &kp RIGHT_BRACE  &none                    &kp CARET  &kp TILDE  &kp LG(V)  &none     &none  &none
-&none  &none  &none  &none           &none            &none      &none  &none  &none      &none      &none      &none     &none  &none
+&none   &none  &kp CARET  &kp LBKT        &kp RBKT         &kp LANG2                &kp LG(L)   &kp LG(E)    &kp LG(R)  &none     &none  &none
+&none   &none  &kp TILDE  &kp LPAR        &kp RPAR         &kp LANG1                &kp JP_YEN  &kp JP_PIPE  &kp FSLH   &kp BSPC  &none  &none
+&trans  &none  &none      &kp LEFT_BRACE  &kp RIGHT_BRACE  &none                    &none       &none        &kp LG(V)  &none     &none  &trans
+&trans  &none  &none      &none           &none            &none      &none  &none  &none       &none        &none      &none     &none  &trans
             >;
         };
 
