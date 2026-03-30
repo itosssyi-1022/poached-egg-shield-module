@@ -1,90 +1,92 @@
-# Poached Eggs firmware investigation report
+# Poached Eggs firmware 調査レポート
 
-## Summary
+## 要約
 
-- This repository builds **ZMK** firmware for the **Poached Eggs** split keyboard.
-- Both halves target the **Seeed Studio XIAO BLE** (`seeeduino_xiao_ble`), which is an **nRF52840**-based MCU.
-- The left half is configured as the **split central** and the right half is the **split peripheral**.
-- The most likely reason a newly generated `.keymap` build appears to have **no effect at all** is that the repository enables **ZMK Studio** on the left half, and ZMK persistent settings can keep using a previously saved runtime keymap even after reflashing new firmware.
-- This repository did not provide a GitHub Actions build for **`settings_reset`**, so there was no built-in way to clear the persisted settings from the generated artifacts.
+- このリポジトリは、**Poached Eggs** という分割キーボード向けの **ZMK** firmware をビルドする構成です。
+- 左右の両方のデバイスは、**Seeed Studio XIAO BLE**（`seeeduino_xiao_ble`）を対象にしています。これは **nRF52840** ベースのマイコンです。
+- 左半分は **split central**、右半分は **split peripheral** として構成されています。
+- `.keymap` を変更して Actions で生成した firmware を書き込んでも**まったく反映されない**主因として最も可能性が高いのは、左半分で **ZMK Studio** が有効になっており、過去に保存された永続設定が新しい compiled keymap より優先されていることです。
+- このリポジトリでは、もともと **`settings_reset`** 用の GitHub Actions artifact を生成していなかったため、Actions から取得した firmware だけでは永続設定を消去できませんでした。
 
-## Repository findings
+## リポジトリ調査結果
 
-### Hardware / MCU
+### ハードウェア / MCU
 
-- Build target board: `seeeduino_xiao_ble`
-  - Source: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/build.yaml`
-- Shield metadata requires `seeed_xiao`
-  - Source: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/boards/shields/poached_eggs/poached_eggs.zmk.yml`
+- ビルド対象ボード: `seeeduino_xiao_ble`
+  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/build.yaml`
+- shield metadata 上では `seeed_xiao` を要求
+  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/boards/shields/poached_eggs/poached_eggs.zmk.yml`
 
-### Split roles
+### split の役割
 
-- `CONFIG_ZMK_SPLIT_ROLE_CENTRAL` is enabled only for the left shield.
-- `CONFIG_ZMK_SPLIT` is enabled for both left and right shields.
-  - Source: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/boards/shields/poached_eggs/Kconfig.defconfig`
+- `CONFIG_ZMK_SPLIT_ROLE_CENTRAL` は左側 shield でのみ有効
+- `CONFIG_ZMK_SPLIT` は左右両方で有効
+  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/boards/shields/poached_eggs/Kconfig.defconfig`
 
-This means:
+これはつまり、
 
-- **Left half**: talks to the host and evaluates the keymap.
-- **Right half**: sends matrix events to the left half.
+- **左半分**: ホスト PC / 端末と通信し、最終的に keymap を評価する側
+- **右半分**: キー入力イベントを左半分へ送る側
 
-So if the user checks only host-visible behavior, the left half is the important side to verify first.
+という意味です。  
+そのため、ホストから見える挙動を確認する場合は、まず左半分の状態を重視して調べる必要があります。
 
-### Studio / persistent settings
+### Studio / 永続設定
 
-- The left half enables:
+- 左半分では次の設定が有効です
   - `CONFIG_ZMK_STUDIO=y`
   - `CONFIG_ZMK_STUDIO_LOCKING=y`
-  - Source: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/boards/shields/poached_eggs/poached_eggs_left.conf`
-- The GitHub Actions build for the left half also adds the `studio-rpc-usb-uart` snippet.
-  - Source: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/build.yaml`
-- The keymap contains a `&studio_unlock` binding on the Bluetooth control layer.
-  - Source: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/poached_eggs.keymap`
+  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/boards/shields/poached_eggs/poached_eggs_left.conf`
+- GitHub Actions の左側 build には `studio-rpc-usb-uart` snippet も追加されています
+  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/build.yaml`
+- keymap には Bluetooth control layer 上に `&studio_unlock` binding があります
+  - 出典: `/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/config/poached_eggs.keymap`
 
-These settings strongly indicate that the normal left-half firmware is intended to be used with ZMK Studio.
+これらの設定から、このリポジトリの左側 firmware は ZMK Studio と併用される前提で作られていると判断できます。
 
-## Root cause analysis
+## 原因分析
 
-The most plausible failure mode is:
+今回の現象として最もあり得る流れは次のとおりです。
 
-1. A prior runtime keymap or other persisted ZMK settings already exist in flash.
-2. The user edits `/config/poached_eggs.keymap`, pushes changes, and downloads the newly built firmware from GitHub Actions.
-3. The user reflashes both halves.
-4. On boot, ZMK restores the persisted settings and continues using the stored runtime keymap/state instead of the newly compiled default keymap.
-5. The user observes that the `.keymap` changes were not reflected.
+1. 以前に保存された runtime keymap またはその他の ZMK 永続設定がフラッシュ領域に残っている
+2. ユーザーが `/config/poached_eggs.keymap` を編集し、push して GitHub Actions から新しい firmware を取得する
+3. 左右のデバイスに firmware を再書き込みする
+4. 起動時に ZMK が永続設定を復元し、新しく compile されたデフォルト keymap ではなく、保存済みの runtime keymap / 状態を使い続ける
+5. その結果、ユーザーからは「`.keymap` の変更が反映されていない」ように見える
 
-This matches the repository because the left firmware explicitly enables ZMK Studio and persistent runtime editing support.
+左側 firmware で ZMK Studio と永続的な runtime 編集機能が有効になっているため、この説明はリポジトリの内容と整合します。
 
-## Why the problem is easy to misdiagnose
+## 誤診しやすい理由
 
-- The right half is not the split central, so flashing only the right half cannot explain host-side keymap behavior by itself.
-- The generated left and right firmware files can both be flashed successfully, but a successful flash does **not** imply that persisted settings were cleared.
-- The repository previously generated only the normal left/right firmware, not a reset image.
+- 右半分は split central ではないため、右側だけを書き込んでもホスト側の keymap 挙動の説明にはなりません
+- 左右の firmware が正常に書き込めたとしても、それは**永続設定が消去されたことを意味しません**
+- 変更前のこのリポジトリでは、通常の left / right firmware しか生成されず、reset 用 image がありませんでした
 
-## Change made in this repository
+## このリポジトリで行った変更
 
-`/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/build.yaml` now also builds:
+`/home/runner/work/poached-egg-shield-module/poached-egg-shield-module/build.yaml` に、以下の build を追加しました。
 
 - `seeeduino_xiao_ble + settings_reset`
 
-This adds a GitHub Actions artifact that can be flashed to clear ZMK persistent settings before reflashing the normal Poached Eggs firmware.
+これにより、GitHub Actions から **ZMK の永続設定を消去するための artifact** を取得できるようになります。  
+その後に通常の Poached Eggs firmware を再書き込みすることで、compiled keymap を反映しやすくなります。
 
-## Recommended recovery procedure
+## 推奨復旧手順
 
-1. Run GitHub Actions and download these artifacts:
+1. GitHub Actions を実行し、以下の artifact を取得する
    - `poached_eggs_left`
    - `poached_eggs_right`
    - `settings_reset`
-2. Flash `settings_reset` to the **left** half.
-3. Flash `settings_reset` to the **right** half.
-4. Reflash the normal firmware:
-   - left half: `poached_eggs_left`
-   - right half: `poached_eggs_right`
-5. If Bluetooth was previously paired, remove the old host pairing and pair again.
-6. Verify the updated layout from the **left/central** side behavior first.
+2. **左半分** に `settings_reset` を書き込む
+3. **右半分** にも `settings_reset` を書き込む
+4. 続けて通常 firmware を再書き込みする
+   - 左半分: `poached_eggs_left`
+   - 右半分: `poached_eggs_right`
+5. 以前の Bluetooth pairing が残っている場合は、ホスト側の登録を削除して再ペアリングする
+6. 反映確認は、まず **左側 / central 側の挙動** を基準に行う
 
-## Validation notes
+## 検証メモ
 
-- I inspected the repository build and shield configuration directly.
-- A full local ZMK build could not be executed in this environment because `west` is not installed here.
-- The change is intentionally minimal: it only adds the missing reset artifact build and records the investigation results.
+- リポジトリ内の build 設定、shield 設定、keymap 設定を直接確認しました
+- この環境には `west` が入っていないため、ローカルでのフル ZMK build は実行できませんでした
+- 今回の変更は意図的に最小限にしており、**不足していた reset artifact の build 追加** と **調査結果の記録** のみに絞っています
