@@ -9,7 +9,7 @@
 #define JP_QUOTE       AMPERSAND         // '
 #define JP_EQUAL       UNDER             // =
 #define JP_CARET       EQUAL             // ^
-#define JP_YEN         0x89              // \
+#define JP_YEN         0x89              // Yen / backslash
 #define JP_PLUS        COLON             // +
 #define JP_TILDE       PLUS              // ~
 #define JP_PIPE        LS(0x89)          // |
