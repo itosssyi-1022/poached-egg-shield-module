@@ -60,7 +60,7 @@
             bindings = <
 &none   &none  &kp JP_CARET  &kp JP_LBRACKET  &kp JP_RBRACKET  &kp LANG2           &kp LG(L)   &kp LG(E)    &kp LG(R)  &none     &none  &none
 &none   &none  &kp JP_TILDE  &kp JP_LPAREN    &kp JP_RPAREN    &kp LANG1           &kp JP_YEN  &kp JP_PIPE  &kp FSLH   &kp BSPC  &none  &none
-&trans  &none  &none         &kp JP_LBRACE    &kp JP_RBRACE    &none               &none       &none        &kp LG(V)  &none     &none  &trans
+&trans  &none  &none         &kp JP_LBRACE    &kp JP_RBRACE    &none               &none       &none        &kp LG(V)  &kp DEL     &none  &trans
 &trans  &none  &none      &none           &none            &none      &none  &none  &none       &none        &none      &none     &none  &trans
             >;
         };
