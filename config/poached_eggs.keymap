@@ -25,6 +25,11 @@
 #define JP_LBRACE      RIGHT_BRACE       // {
 #define JP_RBRACE      PIPE              // }
 
+#define MAC_LOCK_SCREEN  LC(LG(Q))
+#define MAC_SPOTLIGHT    LG(SPACE)
+#define MAC_APP_SWITCH   LG(TAB)
+#define MAC_EMOJI_VIEWER LC(LG(SPACE))
+
 / {
     keymap {
         compatible = "zmk,keymap";
@@ -71,6 +76,33 @@
 &none  &bt BT_CLR_ALL  &bt BT_CLR  &none         &none         &none                       &none  &none  &none  &none  &none  &none
 &none  &none           &none           &none         &none         &none                       &none  &none  &none  &none  &none  &none
 &none  &none           &none           &none         &none         &none         &trans  &trans  &none  &none  &none  &none  &none  &none
+            >;
+        };
+
+        mac_base_layer {
+            bindings = <
+&trans     &trans   &trans  &trans  &trans     &trans                             &trans  &trans          &trans  &trans  &trans  &trans
+&trans     &trans   &trans  &trans  &trans     &trans                             &trans  &trans          &trans  &trans  &trans  &trans
+&kp LGUI   &lt 7 E    &trans  &trans  &trans     &trans                             &trans  &trans          &trans  &trans  &lt 7 H  &trans
+&trans     &trans   &trans  &trans  &kp LCTRL  &mo 6      &trans       &trans    &mo 6   &lt 7 RIGHT_CONTROL  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        mac_shortcut_function_layer {
+            bindings = <
+&none     &none      &kp JP_BACKQUOTE  &kp JP_AT  &kp HASH  &none             &kp F10  &kp F7  &kp F8  &kp F9  &none  &none
+&none     &none      &kp LG(S)         &kp TAB    &kp LS(TAB)  &none          &kp F11  &kp F4  &kp F5  &kp F6  &none  &none
+&none     &kp LG(A)  &kp LG(X)         &kp LG(C)  &kp LG(V)    &none          &kp F12  &kp F1  &kp F2  &kp F3  &kp JP_UNDERSCORE  &trans
+&kp LALT  &kp LG(Z)  &none             &none      &none        &none          &trans   &trans  &none    &none   &none   &none   &none  &trans
+            >;
+        };
+
+        mac_symbol_language_layer {
+            bindings = <
+&none   &none  &kp JP_CARET  &kp JP_LBRACKET  &kp JP_RBRACKET  &kp LANG2           &kp MAC_LOCK_SCREEN  &kp MAC_SPOTLIGHT  &kp MAC_APP_SWITCH  &none     &none  &none
+&none   &none  &kp JP_TILDE  &kp JP_LPAREN    &kp JP_RPAREN    &kp LANG1           &kp JP_YEN           &kp JP_PIPE        &kp FSLH            &kp BSPC  &none  &none
+&trans  &none  &none         &kp JP_LBRACE    &kp JP_RBRACE    &none               &none                &none              &kp MAC_EMOJI_VIEWER  &kp DEL  &none  &trans
+&trans  &none  &none         &none            &none            &none               &trans               &trans             &none                &none     &none  &none  &none  &trans
             >;
         };
     };

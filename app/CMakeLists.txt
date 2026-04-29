@@ -1,0 +1,2 @@
+# OS切り替え機能を有効化したときだけ、追加のイベントリスナーをビルド対象に含める。
+target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_OS_LAYER app PRIVATE src/behavior_os_layer.c)
