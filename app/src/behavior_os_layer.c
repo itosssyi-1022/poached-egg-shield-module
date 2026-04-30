@@ -4,12 +4,12 @@
 #include <zmk/events/ble_active_profile_changed.h>
 #include <zmk/keymap.h>
 
-// Profile 1 を Mac 用として扱い、Layer 5 を OS 差分レイヤーとして重ねる。
+// Profile 5 を Mac 用として扱い、Layer 5 を OS 差分レイヤーとして重ねる。
 #define MAC_OS_LAYER 5
 
 static void update_os_layers(uint8_t profile) {
     // Mac 接続時だけ差分レイヤーを有効にし、それ以外は Windows 既定に戻す。
-    if (profile == 1) {
+    if (profile == 5) {
         zmk_keymap_layer_activate(MAC_OS_LAYER);
         return;
     }
