@@ -30,6 +30,26 @@
 #define MAC_APP_SWITCH   LG(TAB)
 #define MAC_EMOJI_VIEWER LC(LG(SPACE))
 
+#define MAC_BACKQUOTE    GRAVE
+#define MAC_AT           AT
+#define MAC_UNDERSCORE   UNDERSCORE
+#define MAC_PLUS         PLUS
+#define MAC_ASTERISK     ASTERISK
+#define MAC_AMPERSAND    AMPERSAND
+#define MAC_QUOTE        SINGLE_QUOTE
+#define MAC_DQUOTE       DOUBLE_QUOTES
+#define MAC_COLON        COLON
+#define MAC_CARET        CARET
+#define MAC_TILDE        TILDE
+#define MAC_PIPE         PIPE
+#define MAC_BACKSLASH    BACKSLASH
+#define MAC_LBRACKET     LEFT_BRACKET
+#define MAC_RBRACKET     RIGHT_BRACKET
+#define MAC_LBRACE       LEFT_BRACE
+#define MAC_RBRACE       RIGHT_BRACE
+#define MAC_LPAREN       LEFT_PARENTHESIS
+#define MAC_RPAREN       RIGHT_PARENTHESIS
+
 / {
     keymap {
         compatible = "zmk,keymap";
@@ -81,28 +101,37 @@
 
         mac_base_layer {
             bindings = <
-&trans     &trans   &trans  &trans  &trans     &trans                             &trans  &trans          &trans  &trans  &trans  &trans
-&trans     &trans   &trans  &trans  &trans     &trans                             &trans  &trans          &trans  &trans  &trans  &trans
-&kp LGUI   &lt 7 E    &trans  &trans  &trans     &trans                             &trans  &trans          &trans  &trans  &lt 7 H  &trans
-&trans     &trans   &trans  &trans  &kp LCTRL  &mo 6      &trans       &trans    &mo 6   &lt 7 RIGHT_CONTROL  &trans  &trans  &trans  &trans
+&mo 4      &none    &kp L  &kp U  &kp COMMA  &kp DOT                            &kp F  &kp W            &kp R  &kp Y  &none    &none
+&none      &kp Q    &kp I  &kp A  &kp O      &kp MINUS                          &kp K  &kp T            &kp N  &kp S  &kp P    &none
+&kp LGUI   &lt 8 E    &kp X  &kp C  &kp V      &kp FSLH                           &kp G  &kp D            &kp M  &kp J  &lt 8 H  &kp DEL
+&kp LSHFT  &kp Z    &none  &none  &kp LCTRL  &mo 7      &lt 6 SPACE  &lt 6 RET  &mo 7  &lt 8 RIGHT_CONTROL  &none  &none  &kp B    &kp ESC
+            >;
+        };
+
+        mac_symbol_navigation_layer {
+            bindings = <
+&none      &none            &kp N7  &kp N8  &kp N9  &kp MAC_PLUS       &kp DOLLAR        &kp HOME      &kp UP    &kp END    &kp PSCRN          &none
+&none      &kp MAC_ASTERISK &kp N4  &kp N5  &kp N6  &kp MINUS          &kp PERCENT       &kp LEFT      &kp DOWN  &kp RIGHT  &none              &none
+&kp LGUI   &kp EXCLAMATION  &kp N1  &kp N2  &kp N3  &kp FSLH           &kp MAC_AMPERSAND &kp MAC_QUOTE &kp MAC_DQUOTE  &kp SEMICOLON  &kp MAC_COLON  &kp RIGHT_CONTROL
+&kp LSHFT  &kp N0           &none   &none   &none   &none              &lt 6 SPACE         &lt 6 RET       &none       &none     &none              &none             &kp MAC_UNDERSCORE  &kp ESC
             >;
         };
 
         mac_shortcut_function_layer {
             bindings = <
-&none     &none      &kp JP_BACKQUOTE  &kp JP_AT  &kp HASH  &none             &kp F10  &kp F7  &kp F8  &kp F9  &none  &none
+&none     &none      &kp MAC_BACKQUOTE  &kp MAC_AT  &kp HASH  &none             &kp F10  &kp F7  &kp F8  &kp F9  &none  &none
 &none     &none      &kp LG(S)         &kp TAB    &kp LS(TAB)  &none          &kp F11  &kp F4  &kp F5  &kp F6  &none  &none
-&none     &kp LG(A)  &kp LG(X)         &kp LG(C)  &kp LG(V)    &none          &kp F12  &kp F1  &kp F2  &kp F3  &kp JP_UNDERSCORE  &trans
-&kp LALT  &kp LG(Z)  &none             &none      &none        &none          &trans   &trans  &none    &none   &none   &none   &none  &trans
+&none     &kp LG(A)  &kp LG(X)         &kp LG(C)  &kp LG(V)    &none          &kp F12  &kp F1  &kp F2  &kp F3  &kp MAC_UNDERSCORE  &kp DEL
+&kp LALT  &kp LG(Z)  &none             &none      &none        &none          &lt 6 SPACE  &lt 6 RET  &none    &none   &none   &none   &none  &kp ESC
             >;
         };
 
         mac_symbol_language_layer {
             bindings = <
-&none   &none  &kp JP_CARET  &kp JP_LBRACKET  &kp JP_RBRACKET  &kp LANG2           &kp MAC_LOCK_SCREEN  &kp MAC_SPOTLIGHT  &kp MAC_APP_SWITCH  &none     &none  &none
-&none   &none  &kp JP_TILDE  &kp JP_LPAREN    &kp JP_RPAREN    &kp LANG1           &kp JP_YEN           &kp JP_PIPE        &kp FSLH            &kp BSPC  &none  &none
-&trans  &none  &none         &kp JP_LBRACE    &kp JP_RBRACE    &none               &none                &none              &kp MAC_EMOJI_VIEWER  &kp DEL  &none  &trans
-&trans  &none  &none         &none            &none            &none               &trans               &trans             &none                &none     &none  &none  &none  &trans
+&none   &none  &kp MAC_CARET  &kp MAC_LBRACKET  &kp MAC_RBRACKET  &kp LANG2           &kp MAC_LOCK_SCREEN  &kp MAC_SPOTLIGHT  &kp MAC_APP_SWITCH  &none     &none  &none
+&none   &none  &kp MAC_TILDE  &kp MAC_LPAREN    &kp MAC_RPAREN    &kp LANG1           &kp MAC_BACKSLASH    &kp MAC_PIPE       &kp FSLH            &kp BSPC  &none  &none
+&kp LGUI  &none  &none         &kp MAC_LBRACE    &kp MAC_RBRACE    &none               &none                &none              &kp MAC_EMOJI_VIEWER  &kp DEL  &none  &kp DEL
+&kp LSHFT  &none  &none         &none            &none            &none               &lt 6 SPACE           &lt 6 RET            &none                &none     &none  &none  &none  &kp ESC
             >;
         };
     };
